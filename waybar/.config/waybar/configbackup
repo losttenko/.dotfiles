@@ -1,0 +1,107 @@
+{
+    "layer": "bottom", // Waybar at top layer
+    "position": "top", // Waybar at the bottom of your screen
+    "height": 24, // Waybar height
+    // "width": 1366, // Waybar width
+    // Choose the order of the modules
+    "modules-left": ["sway/workspaces", "sway/mode", "custom/cmus"],
+    "modules-center": ["sway/window"],
+    "modules-right": ["network#1", "network#2", "custom/storage_local", "custom/storage_remote", "pulseaudio", "cpu", "custom/cpu_freq", "temperature", "memory", "battery", "tray", "clock"],
+    "sway/workspaces": {
+        "disable-scroll": true,
+        "all-outputs": true,
+    },
+    "sway/mode": {
+        "format": "<span style=\"italic\">{}</span>"
+    },
+    "tray": {
+        // "icon-size": 21,
+        "spacing": 2
+    },
+    "clock": {
+        //"format": "{:%b-%d-%H:%M}"
+        "format": "{:%a  %B  %d  %H:%M}"
+    },
+    "cpu": {
+    "interval": 2,
+        "format": "{usage}% "
+    },
+    "temperature": {
+	"hwmon-path": "/sys/class/hwmon/hwmon1/temp1_input",
+        "format": "{}°C",
+        "critical-threshold": 80
+    },
+    "custom/cpu_freq": {
+        "format": "{} MHz",
+        "interval": 5,
+        "exec": "cat /proc/cpuinfo| grep MHz | cut -c 12-15 | tr '\n' ' ' | awk '{s+=$1}END{print \"\",s/NR}' RS=\" \" | cut -c 1-5"
+    },
+    "memory": {
+    "format": "{used:0.1f}G/{total:0.1f}G "
+    },
+    "battery": {
+        "bat": "BAT0",
+        "states": {
+            "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{capacity}% {icon}",
+         "format-full": "",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "network#1": {
+	"interface": "eth0*",
+        "interval": 1,
+        "format-ethernet": "Up: {bandwidthUpBits} Down: {bandwidthDownBits}  ",
+        "tooltip-format-ethernet": "{ifname}  ",
+        "format-wifi": "Up: {bandwidthUpBits} Down: {bandwidthDownBits} {essid} ({signalStrength}%)  ",
+        "tooltip-format-wifi": "{ifname} {essid} ({signalStrength}%) ",
+        "format-disconnected": "Disconnected ⚠"
+    },
+    //"network#2": {
+	//"interface": "wlp*",
+        //"interval": 1,
+        //"format-ethernet": "Up: {bandwidthUpBits} Down: {bandwidthDownBits}  ",
+        //"tooltip-format-ethernet": "{ifname}  ",
+        //"format-wifi": "Up: {bandwidthUpBits} Down: {bandwidthDownBits} {essid} ({signalStrength}%)  ",
+        //"tooltip-format-wifi": "{ifname} {essid} ({signalStrength}%) ",
+        //"format-disconnected": "Disconnected ⚠"
+    //},
+    "pulseaudio": {
+        "format": "{volume}% {icon}",
+        "format-bluetooth": "{volume}% {icon}",
+        "format-muted": "",
+        "format-icons": {
+            "headphones": "",
+            "handsfree": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", ""]
+        },
+        "on-click": "pavucontrol"
+    },
+    "custom/cmus": {
+        "format": "♪ {}",
+        //"max-length": 15,
+        "interval": 10,
+        "exec": "cmus-remote -C \"format_print '%a - %t'\"", // artist - title
+        "exec-if": "pgrep cmus",
+        "on-click": "cmus-remote -u",                        //toggle pause
+        "escape": true                                       //handle markup entities
+    },
+    "custom/storage_local": {
+        "format": "{} ",
+        "return-type": "json",
+        "interval": 60,
+        "exec": "~/.config/waybar/modules/local_storage.sh"
+    },
+    "custom/storage_remote": {
+        "format": "{} ",
+        "return-type": "json",
+        "interval": 60,
+        "exec": "~/.config/waybar/modules/remote_storage.sh",
+    }
+}

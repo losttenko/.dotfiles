@@ -1,0 +1,136 @@
+@import "/home/glen/.cache/wal/colors-waybar.css";
+
+* {
+    border: none;
+    border-radius: 0;
+    font-family: "Noto Sans UI";
+    font-size: 13px;
+    min-height: 0;
+	padding-left: 4px;
+	padding-right: 4px;
+	padding-top: 0px;
+}
+
+window#waybar {
+    /*background: transparent;*/
+    background: @color0;
+    color: @color6;
+}
+
+#window {
+    font-weight: bold;
+    font-family: "Noto Sans UI";
+}
+/*
+#workspaces {
+    padding: 0 5px;
+}
+*/
+
+#workspaces button {
+    padding: 0 5px;
+    background: transparent;
+    color: @color15;
+    border-top: 0; /*0px solid transparent;*/
+}
+
+#workspaces button.focused {
+    color: @color9;
+    /*border-top: 2px solid #c9545d;*/
+}
+
+#mode {
+    background: @color3;
+    border-bottom: 3px solid @color15;
+}
+
+#clock, #custom-cmus #custom-storage_local #custom-storage_remote #custom-cpu_freq #battery, #cpu, #memory, #network, #pulseaudio, #temperature, #tray, #mode {
+    padding: 0 3px;
+    margin: 0 2px;
+}
+
+#clock {
+    font-weight: bold;
+}
+
+#battery {
+}
+
+#battery icon {
+}
+
+#battery.charging {
+}
+
+@keyframes blink {
+    to {
+        background-color: @color15;
+        color: @color0;
+    }
+}
+
+#battery.warning.warning {
+    color: @color15;
+}
+
+#battery.warning.warning {
+    color: yellow;
+}
+
+#battery.warning.critical {
+    color: red;
+}
+
+#battery.warning:not(.charging) {
+    color: @color15;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+#cpu {
+}
+
+#memory {
+}
+
+#network {
+}
+
+#network.disconnected {
+    background: #f53c3c;
+}
+
+#pulseaudio {
+}
+
+#pulseaudio.muted {
+}
+
+#tray {
+}
+
+#temperature {
+}
+
+#temperature.critical {
+    color: red;
+    animation-name: blink;
+    animation-duration: 0.5s;
+}
+
+#custom-cmus {
+    font-weight: bold;
+}
+
+#custom-storage_local {
+}
+
+#custom-storage_remote {
+}
+
+#custom-cpu_freq {
+}
+
