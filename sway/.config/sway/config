@@ -25,11 +25,6 @@ bindswitch lid:off output $laptop enable
 #output DP-1 disable
 #output eDP-1 pos 3440 0 res 1920x1080
 
-input "1:1:AT_Translated_Set_2_keyboard" {
-xkb_layout dvorak
-xkb_options caps:backspace
-}
-
 input "2:7:SynPS/2_Synaptics_TouchPad" {
 natural_scroll enabled
 }
@@ -51,6 +46,8 @@ input "1386:21012:Wacom_HID_5214_Pen" map_to_output eDP-1
     bindsym XF86AudioLowerVolume exec ponymix dec 2
     bindsym XF86AudioMute exec ponymix toggle
 
+    #Screenshot
+    bindsym Print exec grim "desktop-$(date +"%Y%m%d%H%M").png"
     # start a terminal
     bindsym $mod+Return exec kitty
 

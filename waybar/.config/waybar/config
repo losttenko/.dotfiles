@@ -6,7 +6,7 @@
     // Choose the order of the modules
     "modules-left": ["sway/workspaces", "sway/mode", "custom/cmus"],
     "modules-center": ["sway/window"],
-    "modules-right": ["network#2", "pulseaudio", "cpu", "custom/cpu_freq", "temperature", "memory", "tray", "clock"],
+    "modules-right": [ "network#2", "pulseaudio", "cpu", "custom/cpu_freq", "temperature", "memory", "battery", "tray", "clock"],
     "sway/workspaces": {
         "disable-scroll": true,
         "all-outputs": true,

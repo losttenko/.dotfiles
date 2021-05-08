@@ -1,3 +1,4 @@
+alias sudo="sudo "
 alias c="clear"
 alias stowv="stow --adopt -nvt ~ *"
 alias stowcom="stow --adopt -vt ~ *"
@@ -19,3 +20,5 @@ alias top="bpytop"
 alias cat="bat"
 alias scrot='grim "desktop-$(date +"%Y%m%d%H%M").png"'
 alias sscrot='grim -g "$(slurp)" "desktop-$(date +"%Y%m%d%H%M").png"'
+alias v="nvim"
+alias vim="nvim"
