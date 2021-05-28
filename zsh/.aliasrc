@@ -15,10 +15,15 @@ alias ipl="sudo pacman -S --needed $(comm -12 <(pacman -Slq | sort) <(sort ~/.sc
 alias mpl="sudo pacman -Rsu $(comm -23<(pacman -Slq | sort) <(sort ~/.scripts/pkglist.txt))"
 alias upl="sudo pacman -Qqe > ~/.scripts/pkglist.txt"
 alias ls="exa -la"
-alias ps="procs"
 alias top="bpytop"
 alias cat="bat"
 alias scrot='grim "desktop-$(date +"%Y%m%d%H%M").png"'
 alias sscrot='grim -g "$(slurp)" "desktop-$(date +"%Y%m%d%H%M").png"'
 alias v="nvim"
 alias vim="nvim"
+alias dlr="docker container list"
+alias dld="docker container list --filter status=exited"
+alias dla="docker container list -a"
+alias dda="docker container rm -f $(docker container list -qa)"
+alias chmod="chmod -R"
+alias airflow="./airflow.sh"
