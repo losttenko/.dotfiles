@@ -13,7 +13,9 @@
 ;; are the three important ones:
 (setq doom-font (font-spec :family "Source Code Pro" :size 22)
       doom-variable-pitch-font (font-spec :family "Ubuntu" :size 22)
-      doom-big-font (font-spec :family "Source Code Pro" :size 28))
+      doom-big-font (font-spec :family "Source Code Pro" :size 28)
+      )
+
 (after! doom-themes
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t))
@@ -29,7 +31,7 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-spacegrey)
+(setq doom-theme 'doom-one)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -63,3 +65,16 @@
 (use-package! elcord
   :hook (after-init . elcord-mode)
   :custom (elcord-display-buffer-details nil))
+(with-eval-after-load 'ox-latex
+(add-to-list 'org-latex-classes
+             '("org-plain-latex"
+               "\\documentclass{article}
+           [NO-DEFAULT-PACKAGES]
+           [PACKAGES]
+           [EXTRA]"
+               ("\\section{%s}" . "\\section*{%s}")
+               ("\\subsection{%s}" . "\\subsection*{%s}")
+               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+               ("\\paragraph{%s}" . "\\paragraph*{%s}")
+               ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+(setq org-latex-listings 't)
