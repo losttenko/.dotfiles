@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name:airflow_python_operator
+# key: _po
+# --
+${1:name} = PythonOperator(
+    task_id='$1',
+    python_callable=${2:pyfunc},
+)
+
+$0

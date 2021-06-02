@@ -1,0 +1,8 @@
+# key: _bo
+# name: airflow_bash_operator
+# --
+${1:name} = BashOperator(
+    task_id='$1',
+    bash_command='${2:bash command}',
+)
+$0

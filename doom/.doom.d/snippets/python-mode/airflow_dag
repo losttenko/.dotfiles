@@ -1,0 +1,33 @@
+# key: _dag
+# name: airflow_dag
+# --
+from airflow import DAG
+from airflow.operators.bash import BashOperator
+from datetime import timedelta
+from airflow.utils.dates import days_ago
+from airflow.operators.python import PythonOperator
+from airflow.providers.http.sensors.http import HttpSensor
+
+
+default_args = {
+    'owner': 'Glen Goodwin',
+    'depends_on_past': ${1:False},
+    'email': ['glen.goodwin1992@gmail.com'],
+    'email_on_failure': ${2:False},
+    'email_on_retry': ${3:False},
+    'retries': ${4:1},
+    'retry_delay': timedelta(minutes=${5:5})
+}
+
+
+with DAG(
+    '${6:dagname}',
+    default_args=default_args,
+    description='${7:description}',
+    schedule_interval=${8:timedelta(days=1)},
+    start_date=${9:days_ago(2)},
+    tags=[${10:'example'}],
+) as dag:
+
+
+$0
