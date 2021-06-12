@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: flask_route
+# key: _route
+# --
+@app.route("${1:/all}")
+def ${2:function}():
+    return ${3:ret}
+
+$0

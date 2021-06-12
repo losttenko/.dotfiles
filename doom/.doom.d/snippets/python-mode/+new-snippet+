@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: airflow_sftp
+# key: _ftp
+# --
+${1:name} = SFTPOperator(
+    task_id="$1",
+    ssh_conn_id=${2:"hexatonic_fs"},
+    local_filepath="/tmp/file.txt",
+    remote_filepath=${3:"/extract"},
+    operation="put",
+    create_intermediate_dirs=True,
+    dag=dag
+)
+$0
