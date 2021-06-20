@@ -31,7 +31,7 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-one)
+(setq doom-theme 'doom-vibrant)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -101,3 +101,69 @@
 (setq
     org-superstar-headline-bullets-list '("⁖" "◉" "○" "✸" "✿")
 )
+
+(setq evil-vsplit-window-right t
+      evil-split-window-below t)
+
+(defadvice! prompt-for-buffer (&rest _)
+  :after '(evil-window-split evil-window-vsplit)
+  (+ivy/switch-buffer))
+(setq +ivy-buffer-preview t)
+
+(custom-set-faces!
+  '(doom-modeline-buffer-modified :foreground "orange"))
+
+(setq doom-fallback-buffer-name "► Doom"
+      +doom-dashboard-name "► Doom")
+
+(setq frame-title-format
+      '(""
+        (:eval
+         (if (s-contains-p org-roam-directory (or buffer-file-name ""))
+             (replace-regexp-in-string
+              ".*/[0-9]*-?" "☰ "
+              (subst-char-in-string ?_ ?  buffer-file-name))
+           "%b"))
+        (:eval
+         (let ((project-name (projectile-project-name)))
+           (unless (string= "-" project-name)
+             (format (if (buffer-modified-p)  " ◉ %s" "  ●  %s") project-name))))))
+
+;; org roam bibtex
+(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
+(add-hook! '+doom-dashboard-mode-hook (hide-mode-line-mode 1) (hl-line-mode -1))
+(setq-hook! '+doom-dashboard-mode-hook evil-normal-state-cursor (list nil))
+
+(use-package! org-roam-bibtex
+  :after org-roam
+  :hook (org-roam-mode . org-roam-bibtex-mode)
+  :config
+  (require 'org-ref)) ; optional: if Org Ref is not loaded anywhere else, load it here
+
+;; splits prompt for buffer and preview
+(setq evil-vsplit-window-right t
+      evil-split-window-below t)
+
+(defadvice! prompt-for-buffer (&rest _)
+  :after '(evil-window-split evil-window-vsplit)
+  (+ivy/switch-buffer))
+
+(setq +ivy-buffer-preview t)
+
+;; layout rotation
+
+(map! :map evil-window-map
+      "SPC" #'rotate-layout
+      ;; Navigation
+      "<left>"     #'evil-window-left
+      "<down>"     #'evil-window-down
+      "<up>"       #'evil-window-up
+      "<right>"    #'evil-window-right
+      ;; Swapping windows
+      "C-<left>"       #'+evil/window-move-left
+      "C-<down>"       #'+evil/window-move-down
+      "C-<up>"         #'+evil/window-move-up
+      "C-<right>"      #'+evil/window-move-right)
+
+;; defualt mode to org
+;; (setq-default major-mode 'org-mode)

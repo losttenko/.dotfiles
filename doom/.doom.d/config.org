@@ -1,5 +1,5 @@
 #+TITLE: Config
-
+#+PROPERTY: header-args :tangle ~/Documents/test.el
 * User Info
 #+begin_src emacs-lisp
 (setq user-full-name "Glen"
@@ -27,11 +27,6 @@
 (setq doom-theme 'doom-one)
 #+end_src
 
-;; If you use `org' and don't want your org files in the default location below,
-;; change `org-directory'. It must be set before org loads!
-
-;; This determines the style of line numbers in effect. If set to `nil', line
-;; numbers are disabled. For relative line numbers, set this to `relative'.
 * Line Numbers
 #+begin_src emacs-lisp
 (setq display-line-numbers-type `relative)
@@ -39,7 +34,7 @@
 
 * Some Reasonable Defaults
 #+begin_src emacs-lisp
-(setq org-directory "~/.org/")
+(setq org-directory "~/org/")
 (setq-default
  delete-by-moving-to-trash t                      ; Delete files to trash
  window-combination-resize t                      ; take new window space from all other windows (not just current)
