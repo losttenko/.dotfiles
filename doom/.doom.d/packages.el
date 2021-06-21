@@ -59,3 +59,61 @@
 
 ;; When using bibtex-completion via the `biblio` module
 (unpin! bibtex-completion helm-bibtex ivy-bibtex)
+
+(package! calctex :recipe (:host github :repo "johnbcoughlin/calctex"
+                           :files ("*.el" "calctex/*.el" "calctex-contrib/*.el" "org-calctex/*.el" "vendor"))
+  :pin "784cf911bc96aac0f47d529e8cee96ebd7cc31c9")
+
+
+(package! ess-view :pin "925cafd876e2cc37bc756bb7fcf3f34534b457e2") ;; dataframes
+
+(package! info-colors :pin "47ee73cc19b1049eef32c9f3e264ea7ef2aaf8a5") ;; nicer man pages
+
+
+(package! calibredb :pin "a3b04c0c37b1e8ceff2472e21a3579e64e944528") ;; ebook library manager
+
+
+(package! nov :pin "b3c7cc28e95fe25ce7b443e5f49e2e45360944a3") ;; ebook reader
+
+;; latex auto snippets
+(package! aas :recipe (:host github :repo "ymarco/auto-activating-snippets")
+  :pin "3076cefea0f6ae9d7757f13c27b5602e007b58ec")
+(package! laas :recipe (:local-repo "lisp/LaTeX-auto-activating-snippets"))
+
+(package! org-super-agenda :pin "f5e80e4d0da6b2eeda9ba21e021838fa6a495376")
+
+(package! doct
+  :recipe (:host github :repo "progfolio/doct")
+  :pin "67fc46c8a68989b932bce879fbaa62c6a2456a1f")
+
+(package! org-pretty-table
+  :recipe (:host github :repo "Fuco1/org-pretty-table") :pin "87772a9469d91770f87bfa788580fca69b9e697a")
+
+
+;; superstar tags
+(package! org-pretty-tags :pin "5c7521651b35ae9a7d3add4a66ae8cc176ae1c76")
+
+;; latex fragment previews
+
+(package! org-fragtog :pin "0151cabc7aa9f244f82e682b87713b344d780c23")
+
+;; org formatting markers
+(package! org-appear :recipe (:host github :repo "awth13/org-appear")
+  :pin "6ee49875f8bdefafbde849f5628d673e9740cf8c")
+
+;; syntax highligting on latex export
+(package! engrave-faces :recipe (:host github :repo "tecosaur/engrave-faces"))
+
+(package! ox-gfm :pin "99f93011b069e02b37c9660b8fcb45dab086a07f") ;; markdown export stuff
+
+
+(package! org-ref :pin "3ca9beb744621f007d932deb8a4197467012c23a") ;; citations
+
+(package! org-roam-server :pin "2122a61e9e9be205355c7e2c1e4b65986d6985a5")
+
+(package! graphviz-dot-mode :pin "3642a0a5f41a80c8ecef7c6143d514200b80e194")
+
+;;Declarative Org Capture Templates
+(package! doct
+  :recipe (:host github :repo "progfolio/doct")
+  :pin "67fc46c8a68989b932bce879fbaa62c6a2456a1f")

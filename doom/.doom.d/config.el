@@ -35,7 +35,7 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/.org/")
+(setq org-directory "~/org/")
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -167,3 +167,221 @@
 
 ;; defualt mode to org
 ;; (setq-default major-mode 'org-mode)
+
+
+;; latex auto snippets
+(use-package! aas
+  :commands aas-mode)
+
+(use-package! laas
+  :hook (LaTeX-mode . laas-mode)
+  :config
+  (defun laas-tex-fold-maybe ()
+    (unless (equal "/" aas-transient-snippet-key)
+      (+latex-fold-last-macro-a)))
+  (add-hook 'aas-post-snippet-expand-hook #'laas-tex-fold-maybe))
+
+
+;; prettier tables
+(use-package! org-pretty-table
+  :commands (org-pretty-table-mode global-org-pretty-table-mode))
+
+
+(use-package! engrave-faces-latex
+  :after ox-latex)
+
+
+(use-package org-roam-server
+  :after (org-roam server)
+  :config
+  (setq org-roam-server-host "127.0.0.1"
+        org-roam-server-port 8078
+        org-roam-server-export-inline-images t
+        org-roam-server-authenticate nil
+        org-roam-server-network-label-truncate t
+        org-roam-server-network-label-truncate-length 60
+        org-roam-server-network-label-wrap-length 20)
+  (defun org-roam-server-open ()
+    "Ensure the server is active, then open the roam graph."
+    (interactive)
+    (org-roam-server-mode 1)
+    (browse-url-xdg-open (format "http://localhost:%d" org-roam-server-port))))
+
+
+(after! all-the-icons
+  (setcdr (assoc "m" all-the-icons-extension-icon-alist)
+          (cdr (assoc "matlab" all-the-icons-extension-icon-alist))))
+
+
+(after! avy
+  ;; home row priorities: 8 6 4 5 - - 1 2 3 7
+  (setq avy-keys '(?w ?i ?e ?a ?t ?n ?s ?h)))
+
+
+(setq calc-angle-mode 'rad  ; radians are rad
+      calc-symbolic-mode t) ; keeps expressions like \sqrt{2} irrational for as long as possible
+
+
+
+;; calctex stuff
+(use-package! calctex
+  :commands calctex-mode
+  :init
+  (add-hook 'calc-mode-hook #'calctex-mode)
+  :config
+  (setq calctex-additional-latex-packages "
+\\usepackage[usenames]{xcolor}
+\\usepackage{soul}
+\\usepackage{adjustbox}
+\\usepackage{amsmath}
+\\usepackage{amssymb}
+\\usepackage{siunitx}
+\\usepackage{cancel}
+\\usepackage{mathtools}
+\\usepackage{mathalpha}
+\\usepackage{xparse}
+\\usepackage{arevmath}"
+        calctex-additional-latex-macros
+        (concat calctex-additional-latex-macros
+                "\n\\let\\evalto\\Rightarrow"))
+  (defadvice! no-messaging-a (orig-fn &rest args)
+    :around #'calctex-default-dispatching-render-process
+    (let ((inhibit-message t) message-log-max)
+      (apply orig-fn args)))
+  ;; Fix hardcoded dvichop path (whyyyyyyy)
+  (let ((vendor-folder (concat (file-truename doom-local-dir)
+                               "straight/"
+                               (format "build-%s" emacs-version)
+                               "/calctex/vendor/")))
+    (setq calctex-dvichop-sty (concat vendor-folder "texd/dvichop")
+          calctex-dvichop-bin (concat vendor-folder "texd/dvichop")))
+  (unless (file-exists-p calctex-dvichop-bin)
+    (message "CalcTeX: Building dvichop binary")
+    (let ((default-directory (file-name-directory calctex-dvichop-bin)))
+      (call-process "make" nil nil nil))))
+
+
+(map! :map calc-mode-map
+      :after calc
+      :localleader
+      :desc "Embedded calc (toggle)" "e" #'calc-embedded)
+(map! :map org-mode-map
+      :after org
+      :localleader
+      :desc "Embedded calc (toggle)" "E" #'calc-embedded)
+(map! :map latex-mode-map
+      :after latex
+      :localleader
+      :desc "Embedded calc (toggle)" "e" #'calc-embedded)
+
+
+(defvar calc-embedded-trail-window nil)
+(defvar calc-embedded-calculator-window nil)
+
+(defadvice! calc-embedded-with-side-pannel (&rest _)
+  :after #'calc-do-embedded
+  (when calc-embedded-trail-window
+    (ignore-errors
+      (delete-window calc-embedded-trail-window))
+    (setq calc-embedded-trail-window nil))
+  (when calc-embedded-calculator-window
+    (ignore-errors
+      (delete-window calc-embedded-calculator-window))
+    (setq calc-embedded-calculator-window nil))
+  (when (and calc-embedded-info
+             (> (* (window-width) (window-height)) 1200))
+    (let ((main-window (selected-window))
+          (vertical-p (> (window-width) 80)))
+      (select-window
+       (setq calc-embedded-trail-window
+             (if vertical-p
+                 (split-window-horizontally (- (max 30 (/ (window-width) 3))))
+               (split-window-vertically (- (max 8 (/ (window-height) 4)))))))
+      (switch-to-buffer "*Calc Trail*")
+      (select-window
+       (setq calc-embedded-calculator-window
+             (if vertical-p
+                 (split-window-vertically -6)
+               (split-window-horizontally (- (/ (window-width) 2))))))
+      (switch-to-buffer "*Calculator*")
+      (select-window main-window))))
+
+(after! company
+  (setq company-idle-delay 0.5
+        company-minimum-prefix-length 2)
+  (setq company-show-numbers t)
+  (add-hook 'evil-normal-state-entry-hook #'company-abort)) ;; make aborting less annoying.
+
+(setq-default history-length 1000)
+(setq-default prescient-history-length 1000)
+
+
+(set-company-backend! 'ess-r-mode '(company-R-args company-R-objects company-dabbrev-code :separate))
+(set-company-backend! 'ess-r-mode '(company-R-args company-R-objects company-dabbrev-code :separate))
+
+
+;; pdf modeline
+(after! doom-modeline
+  (doom-modeline-def-segment buffer-name
+    "Display the current buffer's name, without any other information."
+    (concat
+     (doom-modeline-spc)
+     (doom-modeline--buffer-name)))
+
+  (doom-modeline-def-segment pdf-icon
+    "PDF icon from all-the-icons."
+    (concat
+     (doom-modeline-spc)
+     (doom-modeline-icon 'octicon "file-pdf" nil nil
+                         :face (if (doom-modeline--active)
+                                   'all-the-icons-red
+                                 'mode-line-inactive)
+                         :v-adjust 0.02)))
+
+  (defun doom-modeline-update-pdf-pages ()
+    "Update PDF pages."
+    (setq doom-modeline--pdf-pages
+          (let ((current-page-str (number-to-string (eval `(pdf-view-current-page))))
+                (total-page-str (number-to-string (pdf-cache-number-of-pages))))
+            (concat
+             (propertize
+              (concat (make-string (- (length total-page-str) (length current-page-str)) ? )
+                      " P" current-page-str)
+              'face 'mode-line)
+             (propertize (concat "/" total-page-str) 'face 'doom-modeline-buffer-minor-mode)))))
+
+  (doom-modeline-def-segment pdf-pages
+    "Display PDF pages."
+    (if (doom-modeline--active) doom-modeline--pdf-pages
+      (propertize doom-modeline--pdf-pages 'face 'mode-line-inactive)))
+
+  (doom-modeline-def-modeline 'pdf
+    '(bar window-number pdf-pages pdf-icon buffer-name)
+    '(misc-info matches major-mode process vcs)))
+
+
+(setq elcord-use-major-mode-as-main-icon t)
+
+
+(setq eros-eval-result-prefix "⟹ ")
+
+
+(after! evil
+  (setq evil-ex-substitute-global t     ; I like my s/../.. to by global by default
+        evil-move-cursor-back nil       ; Don't move the block cursor when toggling insert mode
+        evil-kill-on-visual-paste nil)) ; Don't put overwritten text in the kill ring
+
+
+(use-package! info-colors
+  :commands (info-colors-fontify-node))
+
+(add-hook 'Info-selection-hook 'info-colors-fontify-node)
+
+
+(setq ivy-read-action-function #'ivy-hydra-read-action)
+
+
+(setq ivy-sort-max-size 50000)
+
+
+(run-with-idle-timer 0.1 nil (lambda () (add-hook 'doom-load-theme-hook 'theme-magic-from-emacs)))
