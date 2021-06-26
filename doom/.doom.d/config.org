@@ -1,8 +1,12 @@
+#+PROPERTY: header-args:elisp  :tangle config2.el
 * User
 #+begin_src elisp
 (setq user-full-name "Glen"
       user-mail-address "losttenko@gmail.com")
 #+end_src
+
+#+Results:
+: losttenko@gmail.com
 
 * Fonts
 #+begin_src elisp
@@ -64,6 +68,10 @@
 
 (add-hook 'org-mode-hook #'locally-defer-font-lock)
 #+end_src
+
+#+RESULTS:
+| jupyter-org-interaction-mode | er/add-org-mode-expansions | +lookup--init-org-mode-handlers-h | (closure (t) (&rest _) (add-hook 'before-save-hook 'org-encrypt-entries nil t)) | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-show-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes | #[0 \301\211\207 [imenu-create-index-function org-imenu-get-tree] 2] | locally-defer-font-lock | org-appear-mode | +org-pretty-mode | doom-disable-show-paren-mode-h | doom-disable-show-trailing-whitespace-h | +org-enable-auto-reformat-tables-h | +org-enable-auto-update-cookies-h | +org-make-last-point-visible-h | org-fancy-priorities-mode | org-superstar-mode | evil-org-mode | toc-org-enable | org-cdlatex-mode | writegood-mode | embrace-org-mode-hook | org-eldoc-load | +literate-enable-recompile-h |
+
 * Org
 #+begin_src elisp
 (setq org-directory "~/org/")
@@ -129,6 +137,9 @@
     (org-roam-server-mode 1)
     (browse-url-xdg-open (format "http://localhost:%d" org-roam-server-port))))
 #+end_src
+
+#+RESULTS:
+: t
 
 * General Settings
 #+begin_src elisp
@@ -248,7 +259,7 @@
 (use-package! engrave-faces-latex
   :after ox-latex)
 
-(defvar org-latex-default-fontset 'alegreya
+(defvar org-latex-default-fontset 'Alegreya
   "Fontset from `org-latex-fontsets' to use by default.
 As cm (computer modern) is TeX's default, that causes nothing
 to be added to the document.
@@ -363,7 +374,7 @@ If \"nil\" no custom fonts will ever be used.")
       :n "u" #'elfeed-search-tag-all-unread
       :n "s" #'elfeed-search-live-filter
       :n "RET" #'elfeed-search-show-entry
-      :n "p" #'elfeed-show-pdf
+      :n "p" #'elfeed-show-Pdf
       :n "+" #'elfeed-search-tag-all
       :n "-" #'elfeed-search-untag-all
       :n "S" #'elfeed-search-set-filter
