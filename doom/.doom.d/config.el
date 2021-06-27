@@ -52,37 +52,6 @@
       doom-unicode-font (font-spec :family "JuliaMono")
       doom-serif-font (font-spec :family "IBM Plex Mono" :weight 'light))
 
-(defvar required-fonts '("JetBrainsMono.*" "Overpass" "JuliaMono" "IBM Plex Mono" "Merriweather" "Alegreya"))
-
-(defvar available-fonts
-  (delete-dups (or (font-family-list)
-                   (split-string (shell-command-to-string "fc-list : family")
-                                 "[,\n]"))))
-
-(defvar missing-fonts
-  (delq nil (mapcar
-             (lambda (font)
-               (unless (delq nil (mapcar (lambda (f)
-                                           (string-match-p (format "^%s$" font) f))
-                                         available-fonts))
-                 font))
-             required-fonts)))
-
-(if missing-fonts
-    (pp-to-string
-     `(unless noninteractive
-        (add-hook! 'doom-init-ui-hook
-          (run-at-time nil nil
-                       (lambda ()
-                         (message "%s missing the following fonts: %s"
-                                  (propertize "Warning!" 'face '(bold warning))
-                                  (mapconcat (lambda (font)
-                                               (propertize font 'face 'font-lock-variable-name-face))
-                                             ',missing-fonts
-                                             ", "))
-                         (sleep-for 0.5))))))
-  ";; No missing fonts detected")
-
 (setq doom-theme 'doom-vibrant)
 (remove-hook 'window-setup-hook #'doom-init-theme-h)
 (add-hook 'after-init-hook #'doom-init-theme-h 'append)
@@ -924,132 +893,10 @@ Must be run as part of `org-font-lock-set-keywords-hook'."
   :priority_e    "[#E]")
 (plist-put +ligatures-extra-symbols :name "⁍")
 
-(setq org-highlight-latex-and-related '(native script entities))
-
-(add-to-list 'org-src-block-faces '("latex" (:inherit default :extend t)))
-
-(use-package! org-fragtog
-  :hook (org-mode . org-fragtog-mode))
-
-(setq org-format-latex-header "\\documentclass{article}
-\\usepackage[usenames]{xcolor}
-
-\\usepackage[T1]{fontenc}
-
-\\usepackage{booktabs}
-
-\\pagestyle{empty}             % do not remove
-% The settings below are copied from fullpage.sty
-\\setlength{\\textwidth}{\\paperwidth}
-\\addtolength{\\textwidth}{-3cm}
-\\setlength{\\oddsidemargin}{1.5cm}
-\\addtolength{\\oddsidemargin}{-2.54cm}
-\\setlength{\\evensidemargin}{\\oddsidemargin}
-\\setlength{\\textheight}{\\paperheight}
-\\addtolength{\\textheight}{-\\headheight}
-\\addtolength{\\textheight}{-\\headsep}
-\\addtolength{\\textheight}{-\\footskip}
-\\addtolength{\\textheight}{-3cm}
-\\setlength{\\topmargin}{1.5cm}
-\\addtolength{\\topmargin}{-2.54cm}
-% my custom stuff
-\\usepackage[nofont,plaindd]{bmc-maths}
-\\usepackage{arev}
-")
-
-(setq org-format-latex-options
-      (plist-put org-format-latex-options :background "Transparent"))
-
 (setq org-export-headline-levels 5) ; I like nesting
 
 (require 'ox-extra)
 (ox-extras-activate '(ignore-headlines))
-
-;; org-latex-compilers = ("pdflatex" "xelatex" "lualatex"), which are the possible values for %latex
-(setq org-latex-pdf-process '("latexmk -f -pdf -%latex -shell-escape -interaction=nonstopmode -output-directory=%o %f"))
-
-(defun +org-export-latex-fancy-item-checkboxes (text backend info)
-  (when (org-export-derived-backend-p backend 'latex)
-    (replace-regexp-in-string
-     "\\\\item\\[{$\\\\\\(\\w+\\)$}\\]"
-     (lambda (fullmatch)
-       (concat "\\\\item[" (pcase (substring fullmatch 9 -3) ; content of capture group
-                             ("square"   "\\\\checkboxUnchecked")
-                             ("boxminus" "\\\\checkboxTransitive")
-                             ("boxtimes" "\\\\checkboxChecked")
-                             (_ (substring fullmatch 9 -3))) "]"))
-     text)))
-
-(add-to-list 'org-export-filter-item-functions
-             '+org-export-latex-fancy-item-checkboxes)
-
-(defvar org-latex-default-fontset 'alegreya
-  "Fontset from `org-latex-fontsets' to use by default.
-As cm (computer modern) is TeX's default, that causes nothing
-to be added to the document.
-
-If \"nil\" no custom fonts will ever be used.")
-
-(eval '(cl-pushnew '(:latex-font-set nil "fontset" org-latex-default-fontset)
-                   (org-export-backend-options (org-export-get-backend 'latex))))
-
-(defvar org-latex-fontsets
-  '((cm nil) ; computer modern
-    (alegreya
-     :serif "\\usepackage[osf]{Alegreya}"
-     :sans "\\usepackage{AlegreyaSans}"
-     :mono "\\usepackage[scale=0.88]{sourcecodepro}"
-     :maths "\\usepackage[varbb]{newpxmath}")
-    (biolinum
-     :serif "\\usepackage[osf]{libertineRoman}"
-     :sans "\\usepackage[sfdefault,osf]{biolinum}"
-     :mono "\\usepackage[scale=0.88]{sourcecodepro}"
-     :maths "\\usepackage[libertine,varvw]{newtxmath}")
-    (fira
-     :sans "\\usepackage[sfdefault,scale=0.85]{FiraSans}"
-     :mono "\\usepackage[scale=0.80]{FiraMono}"
-     :maths "\\usepackage{newtxsf} % change to firamath in future?")
-    (kp
-     :serif "\\usepackage{kpfonts}")
-    (newpx
-     :serif "\\usepackage{newpxtext}"
-     :sans "\\usepackage{gillius}"
-     :mono "\\usepackage[scale=0.9]{sourcecodepro}"
-     :maths "\\usepackage[varbb]{newpxmath}")
-    (noto
-     :serif "\\usepackage[osf]{noto-serif}"
-     :sans "\\usepackage[osf]{noto-sans}"
-     :mono "\\usepackage[scale=0.96]{noto-mono}"
-     ;; Wait till TeXlive 2021 is released, use notomath
-     :maths "\\usepackage{newtxmath}")
-    (plex
-     :serif "\\usepackage{plex-serif}"
-     :sans "\\usepackage{plex-sans}"
-     :mono "\\usepackage[scale=0.95]{plex-mono}"
-     :maths "\\usepackage{newtxmath}") ; may be plex-based in future
-    (source
-     :serif "\\usepackage[osf]{sourceserifpro}"
-     :sans "\\usepackage[osf]{sourcesanspro}"
-     :mono "\\usepackage[scale=0.95]{sourcecodepro}"
-     :maths "\\usepackage{newtxmath}") ; may be sourceserifpro-based in future
-    (times
-     :serif "\\usepackage{newtxtext}"
-     :maths "\\usepackage{newtxmath}"))
-  "Alist of fontset specifications.
-Each car is the name of the fontset (which cannot include \"-\").
-
-Each cdr is a plist with (optional) keys :serif, :sans, :mono, and :maths.
-A key's value is a LaTeX snippet which loads such a font.")
-
-(add-to-list 'org-latex-conditional-features '((string= (car (org-latex-fontset-entry)) "alegreya") . alegreya-typeface))
-(add-to-list 'org-latex-feature-implementations '(alegreya-typeface) t)
-(add-to-list 'org-latex-feature-implementations'(.alegreya-tabular-figures :eager t :when (alegreya-typeface table) :order 0.5 :snippet "
-\\makeatletter
-% tabular lining figures in tables
-\\renewcommand{\\tabular}{\\AlegreyaTLF\\let\\@halignto\\@empty\\@tabular}
-\\makeatother\n") t)
-
-(setq org-latex-listings 'engraved) ; NOTE non-standard value
 
 (after! latex
   (setcar (assoc "⋆" LaTeX-fold-math-spec-list) "★")) ;; make \star bigger
@@ -1210,3 +1057,16 @@ Such special cases should be remapped to another value, as given in `string-offs
 \\PassOptionsToPackage{" ("," . preview-required-option-list) "}{preview}\
 \\AtBeginDocument{\\ifx\\ifPreview\\undefined"
 preview-default-preamble "\\fi}\"%' \"\\detokenize{\" %t \"}\""))
+
+(with-eval-after-load 'ox-latex
+(add-to-list 'org-latex-classes
+             '("org-plain-latex"
+               "\\documentclass{article}
+           [NO-DEFAULT-PACKAGES]
+           [PACKAGES]
+           [EXTRA]"
+               ("\\section{%s}" . "\\section*{%s}")
+               ("\\subsection{%s}" . "\\subsection*{%s}")
+               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+               ("\\paragraph{%s}" . "\\paragraph*{%s}")
+               ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
