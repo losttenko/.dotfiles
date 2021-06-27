@@ -146,12 +146,17 @@ remove usefull commands
 * Language Packages
 ** LaTeX
 *** Packages
-Auto activating snippets for convenience
 #+begin_src elisp :tangle packages.el
 (package! aas :recipe (:host github :repo "ymarco/auto-activating-snippets")
   :pin "3076cefea0f6ae9d7757f13c27b5602e007b58ec")
-(package! laas :recipe (:host github :repo "tecosaur/LaTeX-auto-activating-snippets"))
+(package! laas :recipe (:local-repo "lisp/LaTeX-auto-activating-snippets"))
 
+#+end_src
+Auto snippets for convenience
+#+begin_src elisp
+(package! aas :recipe (:host github :repo "ymarco/auto-activating-snippets")
+  :pin "3076cefea0f6ae9d7757f13c27b5602e007b58ec")
+(package! laas :recipe (:local-repo "lisp/LaTeX-auto-activating-snippets"))
 #+end_src
 
 Config for aas
@@ -189,7 +194,7 @@ Config for aas
 (package! org-ol-tree :recipe (:host github :repo "Townk/org-ol-tree")
   :pin "207c748aa5fea8626be619e8c55bdb1c16118c25")
 
-(package! engrave-faces :recipe (:host github :repo "tecosaur/engrave-faces"))
+;;(package! engrave-faces :recipe (:local-repo "lisp/engrave-faces"))
 
 ;; Extra Functionality
 
@@ -206,12 +211,21 @@ Config for aas
 
 (package! org-chef :pin "5b461ed7d458cdcbff0af5013fbdbe88cbfb13a4")
 
-(package! org-pandoc-import :recipe
-  (:host github :repo "tecosaur/org-pandoc-import" :files ("*.el" "filters" "preprocessors")))
+(package! org-pandoc-import
+  :recipe (:host github
+           :repo "tecosaur/org-pandoc-import"
+           :files ("*.el" "filters" "preprocessors")))
 
 (package! org-roam-server :pin "2122a61e9e9be205355c7e2c1e4b65986d6985a5")
 
 (package! graphviz-dot-mode :pin "3642a0a5f41a80c8ecef7c6143d514200b80e194")
+
+
+
+
+
+
+
 
 #+end_src
 *** Visuals
@@ -285,7 +299,7 @@ https://emacs.stackexchange.com/questions/45462/use-a-single-abbrev-table-for-mu
 
 #+end_src
 ** All The Icons
-all-the-icons does a generally great job giving file names icons. One minor issue I have is that when I open a .m file, it’s much more likely to be Matlab than Objective-C. As such, it’ll be switching the icon associated with .m
+all-the-icons does a generally great job giving file names icons. One minor niggle I have is that when I open a .m file, it’s much more likely to be Matlab than Objective-C. As such, it’ll be switching the icon associated with .m
 #+begin_src elisp :tangle config.el
 (after! all-the-icons
   (setcdr (assoc "m" all-the-icons-extension-icon-alist)
@@ -654,7 +668,6 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
           (bibtex-search-entry (car results))
           (org-ref-open-bibtex-pdf))))))
 
-(add-hook 'org-mode-hook 'turn-on-flyspell)
 
 (cl-defmacro lsp-org-babel-enable (lang)
   "Support LANG in org source code block."
@@ -1161,8 +1174,6 @@ For Prettier Rendering
 \\usepackage{arev}
 ")
 
-(setq org-format-latex-options
-      (plist-put org-format-latex-options :background "Transparent"))
 
 #+end_src
 
@@ -1441,8 +1452,8 @@ Such special cases should be remapped to another value, as given in `string-offs
 preview-default-preamble "\\fi}\"%' \"\\detokenize{\" %t \"}\""))
 
 #+end_src
-* Latex Templates
 
+* Latex Templates
 #+begin_src elisp :tangle config.el
 (with-eval-after-load 'ox-latex
 (add-to-list 'org-latex-classes
