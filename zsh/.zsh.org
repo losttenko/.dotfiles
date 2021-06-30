@@ -31,24 +31,6 @@ EDITOR=vim
 #+end_src
 
 
-* Oh-My-Zsh settings
-
-#+begin_src sh :tanle .zshrc
-
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-export ZSH="/home/glen/.oh-my-zsh"
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-DISABLE_UPDATE_PROMPT="true"
-export UPDATE_ZSH_DAYS=7
-ENABLE_CORRECTION="true"
-COMPLETION_WAITING_DOTS="true"
-
-source $ZSH/oh-my-zsh.sh
-#+end_src
-
 * Antigen Plugins
 
 #+begin_src sh :tangle .zshrc
@@ -290,7 +272,7 @@ The keybindins i have set in my terminal.
 
 #+begin_src sh :tangle .zshrc
 
-source ~/keybinds.sh
+source ~/.keybinds.sh
 #+end_src
 
 
@@ -299,4 +281,22 @@ Show off your hardware.
 #+begin_src sh :tangle .zshrc
 
 neofetch
+#+end_src
+
+* Oh-My-Zsh settings
+
+#+begin_src sh :tanle .zshrc
+
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+export ZSH="/home/glen/.oh-my-zsh"
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+DISABLE_UPDATE_PROMPT="true"
+export UPDATE_ZSH_DAYS=7
+ENABLE_CORRECTION="true"
+COMPLETION_WAITING_DOTS="true"
+
+source $ZSH/oh-my-zsh.sh
 #+end_src

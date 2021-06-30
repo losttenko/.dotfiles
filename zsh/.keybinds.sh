@@ -17,7 +17,7 @@
 			then
 				BUFFER="git add -A && git commit -v && git push"
 		fi
-				
+
 		zle accept-line
 	}
 	zle -N git_prepare
@@ -45,7 +45,7 @@
 	}
 	zle -N add_sudo
 	bindkey "^s" add_sudo
-	
+
 # Home - Navigates to the current root workspace
 	function git_root() {
 		BUFFER="cd $(git rev-parse --show-toplevel || echo ".")"
