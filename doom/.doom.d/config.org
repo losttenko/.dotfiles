@@ -873,6 +873,10 @@ Return nil otherwise."
       (message "Replaced %d occurances" count))))
 
 #+end_src
+*** Ref
+#+begin_src elisp :tangle config.el
+(setq org-ref-default-bibliography '("~/Documents/Research/references.bib"))
+#+end_src
 ** Visuals
 *** Font Display
 #+begin_src elisp :tangle config.el

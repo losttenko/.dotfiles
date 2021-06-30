@@ -53,3 +53,11 @@
 	}
 	zle -N git_root
 	bindkey "^h" git_root
+
+  #Pre-Commit Run All
+	function pre_commit() {
+		BUFFER="pre-commit run --all-files"
+		zle end-of-line
+	}
+	zle -N pre_commit
+	bindkey "^p" pre_commit

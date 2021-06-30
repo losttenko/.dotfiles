@@ -1,0 +1,302 @@
+#+TITLE:  Zsh
+* About This Config
+
+This is my personal terminal configuration. It's recomended You lookover before blindly copying or you may break your terminal.
+
+
+* Virtualenvwrapper
+
+I use [[https://virtualenvwrapper.readthedocs.io/en/latest/][virtualenvwrapper]] to manage my python virtual environments. If you do not use plan to use virtualenvwrapper omit the following section
+
+#+begin_src sh :tangle .zshrc
+
+source ~/.local/bin/virtualenvwrapper.sh
+#+end_src
+
+
+* Pywal
+
+I use [[https://github.com/dylanaraps/pywal][pywal]] to generate color themes. If you do not use pywal omit this section.
+#+begin_src sh :tangle .zshrc
+
+cat ~/.config/wpg/sequences
+#+end_src
+* Defaults
+
+vim... because modal is best.
+
+#+begin_src sh :tangle .zshrc
+EDITOR=vim
+
+#+end_src
+
+
+* Oh-My-Zsh settings
+
+#+begin_src sh :tanle .zshrc
+
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+export ZSH="/home/glen/.oh-my-zsh"
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+DISABLE_UPDATE_PROMPT="true"
+export UPDATE_ZSH_DAYS=7
+ENABLE_CORRECTION="true"
+COMPLETION_WAITING_DOTS="true"
+
+source $ZSH/oh-my-zsh.sh
+#+end_src
+
+* Antigen Plugins
+
+#+begin_src sh :tangle .zshrc
+source ~/antigen.zsh
+antigen use oh-my-zsh
+
+#ADD PLUGINS BELOW
+antigen bundle git
+antigen bundle archlinux
+antigen bundle zsh-users/zsh-completions
+antigen bundle zsh-users/zsh-autosuggestions
+antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle thefuck
+antigen bundle vi-mode
+antigen bundle key-bindings
+antigen bundle colored-man-pages
+antigen bundle tmuxinator
+antigen bundle wting/autojump
+antigen bundle django
+antigen bundle docker
+antigen bundle docker-compose
+antigen bundle fzf
+antigen bundle mosh
+antigen bundle nmap
+antigen bundle perms
+antigen bundle virtualenvwrapper
+antigen bundle "MichaelAquilina/zsh-you-should-use"
+antigen bundle dotenv
+
+#THEME
+antigen theme romkatv/powerlevel10k
+
+# Tell Antigen that you're done.
+antigen apply
+#+end_src
+
+
+
+
+
+
+# User configuration
+
+# export MANPATH="/usr/local/man:$MANPATH"
+
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8
+
+# Preferred editor for local and remote sessions
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
+
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
+
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
+#
+# # Load the oh-my-zsh's library.
+
+
+* Plugin Config
+
+** The Fuck
+
+#+begin_src sh :tangle .zshrc
+
+eval $(thefuck --alias)
+# You can use whatever you want as an alias, like for Mondays:
+eval $(thefuck --alias FUCK)
+#+end_src
+
+** Autojump
+
+#+begin_src sh :tangle .zshrc
+source /usr/share/autojump/autojump.zsh
+#+end_src
+
+
+#+begin_src sh :tangle .zshrc
+
+
+# Change cursor shape for different vi modes.
+function zle-keymap-select {
+  if [[ ${KEYMAP} == vicmd ]] ||
+     [[ $1 = 'block' ]]; then
+    echo -ne '\e[1 q'
+  elif [[ ${KEYMAP} == main ]] ||
+       [[ ${KEYMAP} == viins ]] ||
+       [[ ${KEYMAP} = '' ]] ||
+       [[ $1 = 'beam' ]]; then
+    echo -ne '\e[5 q'
+  fi
+}
+zle -N zle-keymap-select
+zle-line-init() {
+    zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
+    echo -ne "\e[5 q"
+}
+zle -N zle-line-init
+echo -ne '\e[5 q' # Use beam shape cursor on startup.
+preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
+PATH="$HOME/.local/bin:$PATH"
+
+# Sets term colors
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+  SESSION_TYPE=remote/ssh
+# many other tests omitted
+else
+  case $(ps -o comm= -p $PPID) in
+    sshd|*/sshd) SESSION_TYPE=remote/ssh;;
+  esac
+    # Only change term colors for local system
+    if [ -f ${XDG_CONFIG_HOME}/wpg/sequences ]; then
+      cat ${XDG_CONFIG_HOME}/wpg/sequences
+    fi
+fi
+
+#+end_src
+
+* Alias
+
+#+begin_src sh :tangle .zshrc
+
+source ~/.aliasrc
+#+end_src
+#+begin_src sh :tangle .aliasrc
+
+alias sudo="sudo "
+alias c="clear"
+alias stowv="stow --adopt -nvt ~ *"
+alias stowcom="stow --adopt -vt ~ *"
+alias t="tar -cvf"
+alias mutt="neomutt"
+alias mux="tmuxinator"
+alias spt="bash ~/.scripts/launchspt.sh"
+alias r="ranger"
+alias rem="make clean && make && ./A1"
+alias pluto="nohup julia ~/.scripts/pluto.jl &"
+alias anav="nohup anaconda-navigator &"
+alias ipl="sudo pacman -S --needed $(comm -12 <(pacman -Slq | sort) <(sort ~/.scripts/pkglist.txt))"
+alias mpl="sudo pacman -Rsu $(comm -23<(pacman -Slq | sort) <(sort ~/.scripts/pkglist.txt))"
+alias upl="sudo pacman -Qqe > ~/.scripts/pkglist.txt"
+alias ls="exa -la"
+alias top="bpytop"
+alias cat="bat"
+alias scrot='grim "desktop-$(date +"%Y%m%d%H%M").png"'
+alias sscrot='grim -g "$(slurp)" "desktop-$(date +"%Y%m%d%H%M").png"'
+alias v="nvim"
+alias vim="nvim"
+alias dlr="docker container list"
+alias dld="docker container list --filter status=exited"
+alias dla="docker container list -a"
+alias dda="docker container rm -f $(docker container list -qa)"
+alias chmod="chmod -R"
+alias airflow="./airflow.sh"
+#+end_src
+
+* Keybinds
+
+The keybindins i have set in my terminal.
+
+
+#+begin_src  sh :tangle .keybinds.sh
+
+# up
+	function up_widget() {
+		BUFFER="cd .."
+		zle accept-line
+	}
+	zle -N up_widget
+	bindkey "^k" up_widget
+
+# git
+	function git_prepare() {
+		if [ -n "$BUFFER" ];
+			then
+				BUFFER="git add -A && git commit -m \"$BUFFER\" && git push"
+		fi
+
+		if [ -z "$BUFFER" ];
+			then
+				BUFFER="git add -A && git commit -v && git push"
+		fi
+
+		zle accept-line
+	}
+	zle -N git_prepare
+	bindkey "^g" git_prepare
+
+# Edit and rerun
+	function edit_and_run() {
+		BUFFER="fc"
+		zle accept-line
+	}
+	zle -N edit_and_run
+	bindkey "^v" edit_and_run
+
+# Enter
+	function enter_line() {
+		zle accept-line
+	}
+	zle -N enter_line
+	bindkey "^o" enter_line
+
+# Sudo
+	function add_sudo() {
+		BUFFER="sudo "$BUFFER
+		zle end-of-line
+	}
+	zle -N add_sudo
+	bindkey "^s" add_sudo
+
+# Home - Navigates to the current root workspace
+	function git_root() {
+		BUFFER="cd $(git rev-parse --show-toplevel || echo ".")"
+		zle accept-line
+	}
+	zle -N git_root
+	bindkey "^h" git_root
+
+  #Pre-Commit Run All
+	function pre_commit() {
+		BUFFER="pre-commit run --all-files"
+		zle end-of-line
+	}
+	zle -N pre_commit
+	bindkey "^p" pre_commit
+#+end_src
+
+#+begin_src sh :tangle .zshrc
+
+source ~/keybinds.sh
+#+end_src
+
+
+* Neofetch
+Show off your hardware.
+#+begin_src sh :tangle .zshrc
+
+neofetch
+#+end_src

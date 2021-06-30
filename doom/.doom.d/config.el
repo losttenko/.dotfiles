@@ -655,6 +655,8 @@ Return nil otherwise."
           (setq count (1+ count))))
       (message "Replaced %d occurances" count))))
 
+(setq org-ref-default-bibliography '("~/Documents/Research/references.bib"))
+
 (add-hook 'org-mode-hook #'+org-pretty-mode)
 
 (custom-set-faces!
