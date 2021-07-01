@@ -147,21 +147,6 @@
     (org-roam-server-mode 1)
     (browse-url-xdg-open (format "http://localhost:%d" org-roam-server-port))))
 
-(use-package abbrev
-  :init
-  (setq-default abbrev-mode t)
-  ;; a hook funtion that sets the abbrev-table to org-mode-abbrev-table
-  ;; whenever the major mode is a text mode
-  (defun tec/set-text-mode-abbrev-table ()
-    (if (derived-mode-p 'text-mode)
-        (setq local-abbrev-table org-mode-abbrev-table)))
-  :commands abbrev-mode
-  :hook
-  (abbrev-mode . tec/set-text-mode-abbrev-table)
-  :config
-  (setq abbrev-file-name (expand-file-name "abbrev.el" doom-private-dir))
-  (setq save-abbrevs 'silently))
-
 (after! all-the-icons
   (setcdr (assoc "m" all-the-icons-extension-icon-alist)
           (cdr (assoc "matlab" all-the-icons-extension-icon-alist))))
