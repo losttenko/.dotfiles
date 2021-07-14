@@ -57,7 +57,7 @@
   #Pre-Commit Run All
 	function pre_commit() {
 		BUFFER="pre-commit run --all-files"
-		zle end-of-line
+		zle accept-line
 	}
 	zle -N pre_commit
 	bindkey "^p" pre_commit
