@@ -34,7 +34,7 @@
 (setq +ivy-buffer-preview t)
 
 (map! :map evil-window-map
-      "SPC" #'rotate-layout
+      "SPC" #'rotate-layout-down
       ;; Navigation
       "<left>"     #'evil-window-left
       "<down>"     #'evil-window-down

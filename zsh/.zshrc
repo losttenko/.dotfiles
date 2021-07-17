@@ -13,7 +13,6 @@ cat ~/.config/wpg/sequences
  export LANG=en_US.UTF-8
 
 source ~/antigen.zsh
-antigen use oh-my-zsh
 
 #ADD PLUGINS BELOW
 antigen bundle git
@@ -39,7 +38,7 @@ antigen bundle "MichaelAquilina/zsh-you-should-use"
 antigen bundle dotenv
 
 #THEME
-antigen theme romkatv/powerlevel10k
+#antigen theme romkatv/powerlevel10k
 
 # Tell Antigen that you're done.
 antigen apply
@@ -90,17 +89,13 @@ source ~/.aliasrc
 
 neofetch
 
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-export ZSH="/home/glen/.oh-my-zsh"
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 DISABLE_UPDATE_PROMPT="true"
 export UPDATE_ZSH_DAYS=7
 #ENABLE_CORRECTION="true"
 COMPLETION_WAITING_DOTS="true"
 
-source $ZSH/oh-my-zsh.sh
 
 source ~/.keybinds.sh
+eval "$(starship init zsh)"
+
