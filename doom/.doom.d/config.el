@@ -34,7 +34,7 @@
 (setq +ivy-buffer-preview t)
 
 (map! :map evil-window-map
-      "SPC" #'rotate-layout-down
+      "SPC" #'rotate-layout
       ;; Navigation
       "<left>"     #'evil-window-left
       "<down>"     #'evil-window-down
@@ -91,6 +91,7 @@
            (unless (string= "-" project-name)
              (format (if (buffer-modified-p)  " ◉ %s" "  ●  %s") project-name))))))
 
+(setq fancy-splash-image (concat doom-private-dir "splash/doom-emacs-color.png"))
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 (add-hook! '+doom-dashboard-mode-hook (hide-mode-line-mode 1) (hl-line-mode -1))
 (setq-hook! '+doom-dashboard-mode-hook evil-normal-state-cursor (list nil))

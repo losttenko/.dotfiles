@@ -3,14 +3,23 @@ source ~/.local/bin/virtualenvwrapper.sh
 cat ~/.config/wpg/sequences
 
 # Preferred editor for local and remote sessions
- if [[ -n $SSH_CONNECTION ]]; then
-   export EDITOR='vim'
- else
-   export EDITOR='vi'
- fi
+if [[ -n $SSH_CONNECTION ]]; then
+	export EDITOR='vim'
+else
+	export TERM="xterm-256color" # getting proper colors
+	export HISTORY_IGNORE="(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..)"
+	export EDITOR="emacsclient -t -a ''"    # $EDITOR use Emacs in terminal
+	export VISUAL="emacsclient -c -a emacs" # $VISUAL use Emacs in GUI mode
+
+fi
 
 # You may need to manually set your language environment
- export LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+DISABLE_UPDATE_PROMPT="true"
+export UPDATE_ZSH_DAYS=7
+ENABLE_CORRECTION="true"
+COMPLETION_WAITING_DOTS="true"
 
 source ~/antigen.zsh
 
@@ -38,7 +47,6 @@ antigen bundle "MichaelAquilina/zsh-you-should-use"
 antigen bundle dotenv
 
 #THEME
-#antigen theme romkatv/powerlevel10k
 
 # Tell Antigen that you're done.
 antigen apply
@@ -87,15 +95,16 @@ fi
 
 source ~/.aliasrc
 
+HISTSIZE=5000               #How many lines of history to keep in memory
+HISTFILE=~/.zsh_history     #Where to save history to disk
+SAVEHIST=5000               #Number of history entries to save to disk
+#HISTDUP=erase               #Erase duplicates in the history file
+setopt    appendhistory     #Append history to the history file (no overwriting)
+setopt    sharehistory      #Share history across terminals
+setopt    incappendhistory  #Immediately append to the history file, not just when a term is killed
+
 neofetch
 
-
-DISABLE_UPDATE_PROMPT="true"
-export UPDATE_ZSH_DAYS=7
-#ENABLE_CORRECTION="true"
-COMPLETION_WAITING_DOTS="true"
-
-
 source ~/.keybinds.sh
-eval "$(starship init zsh)"
 
+eval "$(starship init zsh)"

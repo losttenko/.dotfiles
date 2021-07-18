@@ -28,14 +28,23 @@ vim... because modal is best.
 
 #+begin_src sh :tangle .zshrc
 # Preferred editor for local and remote sessions
- if [[ -n $SSH_CONNECTION ]]; then
-   export EDITOR='vim'
- else
-   export EDITOR='vi'
- fi
+if [[ -n $SSH_CONNECTION ]]; then
+	export EDITOR='vim'
+else
+	export TERM="xterm-256color" # getting proper colors
+	export HISTORY_IGNORE="(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..)"
+	export EDITOR="emacsclient -t -a ''"    # $EDITOR use Emacs in terminal
+	export VISUAL="emacsclient -c -a emacs" # $VISUAL use Emacs in GUI mode
+
+fi
 
 # You may need to manually set your language environment
- export LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+DISABLE_UPDATE_PROMPT="true"
+export UPDATE_ZSH_DAYS=7
+ENABLE_CORRECTION="true"
+COMPLETION_WAITING_DOTS="true"
 #+end_src
 
 
@@ -43,7 +52,6 @@ vim... because modal is best.
 
 #+begin_src sh :tangle .zshrc
 source ~/antigen.zsh
-antigen use oh-my-zsh
 
 #ADD PLUGINS BELOW
 antigen bundle git
@@ -69,7 +77,6 @@ antigen bundle "MichaelAquilina/zsh-you-should-use"
 antigen bundle dotenv
 
 #THEME
-antigen theme romkatv/powerlevel10k
 
 # Tell Antigen that you're done.
 antigen apply
@@ -146,7 +153,6 @@ fi
 source ~/.aliasrc
 #+end_src
 #+begin_src sh :tangle .aliasrc
-
 alias sudo="sudo "
 alias c="clear"
 alias stowv="stow --adopt -nvt ~ *"
@@ -154,46 +160,52 @@ alias stowcom="stow --adopt -vt ~ *"
 alias t="tar -cvf"
 alias mux="tmuxinator"
 alias r="ranger"
-alias pluto="nohup julia ~/.scripts/pluto.jl &"
-alias ls="exa -l"
 alias top="bpytop"
 alias cat="bat"
 alias scrot='grim "desktop-$(date +"%Y%m%d%H%M").png"'
 alias sscrot='grim -g "$(slurp)" "desktop-$(date +"%Y%m%d%H%M").png"'
 alias v="nvim"
 alias vim="nvim"
-alias dlr="docker container list"
-alias dld="docker container list --filter status=exited"
-alias dla="docker container list -a"
-alias dda="docker container rm -f $(docker container list -qa)"
 alias chmod="chmod -R"
-alias airflow="./airflow.sh"
+
+alias .="cd .."
+
+alias ls='exa -al --color=always --group-directories-first' # my preferred listing
+alias la='exa -a --color=always --group-directories-first'  # all files and dirs
+alias ll='exa -l --color=always --group-directories-first'  # long format
+alias lt='exa -aT --color=always --group-directories-first' # tree listing
+
+# confirm before overwriting something
+alias cp="cp -i"
+alias mv='mv -i'
+alias rm='rm -i'
+
+alias emacs="emacsclient -c -a 'emacs'"
+alias doomsync="~/.emacs.d/bin/doom sync"
+alias doomdoctor="~/.emacs.d/bin/doom doctor"
+alias doomupgrade="~/.emacs.d/bin/doom upgrade"
+alias doompurge="~/.emacs.d/bin/doom purge"
+
+alias grep="peco"
 #+end_src
 
+* History
+
+#+begin_src sh :tangle .zshrc
+HISTSIZE=5000               #How many lines of history to keep in memory
+HISTFILE=~/.zsh_history     #Where to save history to disk
+SAVEHIST=5000               #Number of history entries to save to disk
+#HISTDUP=erase               #Erase duplicates in the history file
+setopt    appendhistory     #Append history to the history file (no overwriting)
+setopt    sharehistory      #Share history across terminals
+setopt    incappendhistory  #Immediately append to the history file, not just when a term is killed
+#+end_src
 
 * Neofetch
 Show off your hardware. Tell people you use arch.
 #+begin_src sh :tangle .zshrc
 
 neofetch
-#+end_src
-
-* Oh-My-Zsh settings
-
-#+begin_src sh :tangle .zshrc
-
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-export ZSH="/home/glen/.oh-my-zsh"
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-DISABLE_UPDATE_PROMPT="true"
-export UPDATE_ZSH_DAYS=7
-ENABLE_CORRECTION="true"
-COMPLETION_WAITING_DOTS="true"
-
-source $ZSH/oh-my-zsh.sh
 #+end_src
 
 * Keybinds
@@ -278,6 +290,13 @@ The keybindings I have set in my terminal.
 #+begin_src sh :tangle .zshrc
 
 source ~/.keybinds.sh
+#+end_src
+
+* Starship
+
+#+begin_src sh :tangle .zshrc
+eval "$(starship init zsh)"
+
 #+end_src
 
 * Requirements
