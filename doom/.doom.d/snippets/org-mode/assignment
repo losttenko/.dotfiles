@@ -6,6 +6,6 @@
 #+LaTeX_HEADER: \newcommand{\assignmentnumber}{${1}}
 #+LaTeX_HEADER: \newcommand{\yourcourse}{${2}}
 #+SETUPFILE: ~/Documents/latex/assignment/assignment.org
-#+OPTIONS: toc:nil
+#+OPTIONS: toc:nil title:nil
 
 $0

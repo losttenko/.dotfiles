@@ -75,6 +75,7 @@ antigen bundle perms
 antigen bundle virtualenvwrapper
 antigen bundle "MichaelAquilina/zsh-you-should-use"
 antigen bundle dotenv
+antigen bundle sunlei/zsh-ssh
 
 #THEME
 
@@ -88,10 +89,13 @@ antigen apply
 ** The Fuck
 
 #+begin_src sh :tangle .zshrc
-
 eval $(thefuck --alias)
 # You can use whatever you want as an alias, like for Mondays:
 eval $(thefuck --alias FUCK)
+
+# in ~/.zshrc, before Oh My Zsh is sourced:
+ZSH_DOTENV_ALLOWED_LIST=$HOME/.dotenv/allowed/list
+ZSH_DOTENV_DISALLOWED_LIST=$HOME/.dotenv/disallowed/list
 #+end_src
 
 ** Autojump
@@ -164,8 +168,8 @@ alias top="bpytop"
 alias cat="bat"
 alias scrot='grim "desktop-$(date +"%Y%m%d%H%M").png"'
 alias sscrot='grim -g "$(slurp)" "desktop-$(date +"%Y%m%d%H%M").png"'
-alias v="nvim"
-alias vim="nvim"
+alias v="$EDITOR"
+alias vim="$EDITOR"
 alias chmod="chmod -R"
 
 alias .="cd .."
@@ -188,6 +192,8 @@ alias doompurge="~/.emacs.d/bin/doom purge"
 
 alias grep="peco"
 #+end_src
+
+#+RESULTS:
 
 * History
 
@@ -299,6 +305,19 @@ eval "$(starship init zsh)"
 
 #+end_src
 
+* Environment Variables
+#+begin_src sh :tangle .zshenv
+export PAGER=less
+
+export LANG="en_US.UTF-8"
+export LC_CTYPE="en_US.UTF-8"
+
+export MOZ_USE_XINPUT2=1 # Pixel-perfect trackpads <3
+export MOZ_ENABLE_WAYLAND=1
+export MOZ_DBUS_REMOTE=1
+
+export PYTHONBREAKPOINT=ipdb.set_trace
+#+end_src
 * Requirements
 - ZSH
 - [[https://ohmyz.sh/][Oh-My-Zsh]]

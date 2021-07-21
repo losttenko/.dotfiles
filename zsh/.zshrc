@@ -45,6 +45,7 @@ antigen bundle perms
 antigen bundle virtualenvwrapper
 antigen bundle "MichaelAquilina/zsh-you-should-use"
 antigen bundle dotenv
+antigen bundle sunlei/zsh-ssh
 
 #THEME
 
@@ -54,6 +55,10 @@ antigen apply
 eval $(thefuck --alias)
 # You can use whatever you want as an alias, like for Mondays:
 eval $(thefuck --alias FUCK)
+
+# in ~/.zshrc, before Oh My Zsh is sourced:
+ZSH_DOTENV_ALLOWED_LIST=$HOME/.dotenv/allowed/list
+ZSH_DOTENV_DISALLOWED_LIST=$HOME/.dotenv/disallowed/list
 
 source /usr/share/autojump/autojump.zsh
 

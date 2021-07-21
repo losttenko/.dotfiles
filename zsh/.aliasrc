@@ -9,8 +9,8 @@ alias top="bpytop"
 alias cat="bat"
 alias scrot='grim "desktop-$(date +"%Y%m%d%H%M").png"'
 alias sscrot='grim -g "$(slurp)" "desktop-$(date +"%Y%m%d%H%M").png"'
-alias v="nvim"
-alias vim="nvim"
+alias v="$EDITOR"
+alias vim="$EDITOR"
 alias chmod="chmod -R"
 
 alias .="cd .."
